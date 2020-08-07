@@ -12,32 +12,50 @@ class CPU:
         self.pc = 0
         self.sp = 7
          
+    # instructions suggested adding mar and mdr to CPU class for read and write
+    def ram_read(self, mar):
+        return self.ram[mar]
 
-    def ram_read(self, value, address):
-        self.ram[address] = value
-
-    def ram_write(self, address):
-        return self.ram[address]
+    # see above
+    def ram_write(self, mar, mdr):
+        self.ram[mar] = mdr
        
 
-    def load(self, program):
+    def load(self, progr):
         """Load a program into memory."""
+
         address = 0
+
+        with open(progr) as program:
+            for instruction in program:
+                instruction_split = instruction.split('#')
+                instruction_value = instruction_split[0].strip()
+
+                print(f"INSTRUCTION VALUE: {instruction_value}")
+
+                if instruction_value == '':
+                    continue
+                instruction_num = int(instruction_value, 2)
+                print(f"TO RAM {instruction_num , address}")
+                self.ram_write(address ,instruction_num)
+                address += 1 
+
+        # Commented out the hardcoded program
         # For now, we've just hardcoded a program:
 
-        program = [
-            # From print8.ls8
-            0b10000010, # LDI R0,8
-            0b00000000,
-            0b00001000,
-            0b01000111, # PRN R0
-            0b00000000,
-            0b00000001, # HLT
-        ]
+        # program = [
+        #     # From print8.ls8
+        #     0b10000010, # LDI R0,8
+        #     0b00000000,
+        #     0b00001000,
+        #     0b01000111, # PRN R0
+        #     0b00000000,
+        #     0b00000001, # HLT
+        # ]
 
-        for instruction in program:
-            self.ram[address] = instruction
-            address += 1
+        # for instruction in program:
+        #     self.ram[address] = instruction
+        #     address += 1
 
 
     def alu(self, op, reg_a, reg_b):
