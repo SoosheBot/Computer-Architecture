@@ -96,4 +96,30 @@ class CPU:
         value = self.ram_read(self.reg[self.sp])
         self.reg[self.sp] += 1
         return value
-        
+
+    # def LDI(self, operand_a, operand_b):
+
+    def run(self):
+        self.pc = 0
+        run_instructions = {
+            1: self.HLT,
+            17: self.RET,
+            71: self.PRN,
+            69: self.PUSH,
+            70: self.POP,
+            80: self.CALL,
+            130: self.LDI,
+            160: self.ADD,
+            162: self.MUL,
+            84: self.JMP,
+            85: self.JEQ,
+            86: self.JNE,
+            167: self.CMP,
+           }
+        while not False:
+            IR = self.ram_read(self.pc)
+            operand_a = self.ram_read(self.pc + 1)
+            operand_b = self.ram_read(self.pc + 2)
+            run_instructions[IR](operand_a, operand_b)
+
+        return True
