@@ -11,6 +11,8 @@ class CPU:
         self.reg = [0] * 8
         self.pc = 0
         self.sp = 7
+        self.halt = False
+        self.equal = False
          
     # instructions suggested adding mar and mdr to CPU class for read and write
     def ram_read(self, mar):
@@ -97,11 +99,65 @@ class CPU:
         self.reg[self.sp] += 1
         return value
 
-    # def LDI(self, operand_a, operand_b):
+    def LDI(self, operand_a, operand_b):
+        self.reg[operand_a] = operand_b
+        self.pc += 3
+
+    def PRN(self, operand_a, operand_b):
+        print(self.reg[operand_a])
+        self.pc += 2
+    
+    def HLT(self, operand_a, operand_b):
+        self.pc += 1
+        sys.exit(0)
+    
+    def PUSH(self, operand_a, operand_b):
+        self.push_val(self.reg[operand_a])
+        self.pc += 2
+    
+    def POP(self, operand_a, operand_b):
+        self.reg[operand_a] = self.pop_val()
+        self.pc += 2
+    
+    def CALL(self, operand_a, operand_b):
+        self.push_val(self.pc + 2)
+        self.pc = self.reg[operand_a]
+    
+    
+    def RET(self, operand_a, operand_b):
+        self.pc = self.pop_value()
+
+    def MUL(self, operand_a, operand_b):
+        self.alu("MUL", operand_a, operand_b)
+        self.pc +=3
+
+    def ADD(self, operand_a, operand_b):
+        self.alu("ADD", operand_a, operand_b)
+        self.pc +=3
+
+
+    def JMP(self, operand_a, operand_b):
+        self.pc = self.reg[operand_a]
+
+    def JEQ(self, operand_a, operand_b):
+        if self.equal == True:
+            self.pc = self.reg[operand_a]
+        else:
+            self.pc += 2
+
+    def JNE(self, operand_a, operand_b):
+        if self.equal == False:
+            self.pc = self.reg[operand_a]
+        else:
+            self.pc += 2
+
+    def CMP(self, operand_a, operand_b):
+        self.alu("CMP", operand_a, operand_b)
+        self.pc += 3
 
     def run(self):
         self.pc = 0
-        run_instructions = {
+        run_inst = {
             1: self.HLT,
             17: self.RET,
             71: self.PRN,
@@ -116,10 +172,10 @@ class CPU:
             86: self.JNE,
             167: self.CMP,
            }
-        while not False:
+        while not self.halt:
             IR = self.ram_read(self.pc)
             operand_a = self.ram_read(self.pc + 1)
             operand_b = self.ram_read(self.pc + 2)
-            run_instructions[IR](operand_a, operand_b)
+            run_inst[IR](operand_a, operand_b)
 
-        return True
+        return self.halt
