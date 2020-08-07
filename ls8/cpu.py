@@ -89,4 +89,67 @@ class CPU:
 
     def run(self):
         """Run the CPU."""
-        pass
+        HLT = 0b00000001
+        LDI = 0b10000010
+        PRN = 0b01000111
+        MUL = 0b10100010
+        PUSH = 0b01000101
+        POP = 0b01000110
+        CALL = 0b01010000
+        RET = 0b00010001
+        ADD = 0b10100000
+        running = True
+
+        while running:
+            instruction = self.ram_read(self.pc)
+            opr_a = self.ram_read(self.pc + 1)
+            opr_b = self.ram_read(self.pc + 2)
+            #print(instruction)
+            if instruction == HLT:
+                running = False
+                self.pc +=1
+                
+            elif instruction == LDI:
+                self.reg[opr_a] = opr_b
+                self.pc += 3 
+            
+            elif instruction == PRN:
+                print(self.reg[opr_a])
+                self.pc += 2
+            
+            elif instruction == MUL:
+                product = self.reg[opr_a] * self.reg[opr_b]
+                self.reg[opr_a] = product
+                self.pc += 3
+
+            elif instruction == ADD:
+                added = self.reg[opr_a] + self.reg[opr_b]
+                self.reg[opr_a] = added
+                self.pc += 3 
+
+            elif instruction == PUSH:
+                data = self.reg[opr_a]
+                self.sp -= 1 
+                self.ram_write(self.sp, data)
+                self.pc += 2
+
+            elif instruction == POP:
+                value = self.ram_read(self.sp)
+                self.sp += 1
+                self.reg[opr_a] = value
+                self.pc += 2 
+
+            elif instruction == CALL:
+                #reg2 = self.ram[opr_a]
+                self.sp -= 1
+                self.ram[self.sp] = self.pc + 2
+                self.pc = self.reg[opr_a]
+
+            elif instruction == RET:
+                self.pc = self.ram[self.sp]
+                self.sp += 1 
+
+            else:
+                print(f"bad input: {bin(instruction)}")
+                running = False
+                
