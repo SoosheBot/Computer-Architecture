@@ -21,24 +21,19 @@ class CPU:
         self.ram[mar] = mdr
        
 
-    def load(self, progr):
+    def load(self):
         """Load a program into memory."""
 
         address = 0
 
-        with open(progr) as program:
+        with open(sys.argv[1]) as program:
             for instruction in program:
-                instruction_split = instruction.split('#')
-                instruction_value = instruction_split[0].strip()
-
-                print(f"INSTRUCTION VALUE: {instruction_value}")
-
-                if instruction_value == '':
+                value = instruction.split("")[0].strip()
+                if value == "":
                     continue
-                instruction_num = int(instruction_value, 2)
-                print(f"TO RAM {instruction_num , address}")
-                self.ram_write(address ,instruction_num)
-                address += 1 
+                x = int(value, 2)
+                self.ram[address] = x
+                address += 1
 
         # Commented out the hardcoded program
         # For now, we've just hardcoded a program:

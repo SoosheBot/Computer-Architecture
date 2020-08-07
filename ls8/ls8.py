@@ -7,5 +7,5 @@ from cpu import *
 
 cpu = CPU()
 
-cpu.load(sys.argv[0])
+cpu.load()
 cpu.run()
