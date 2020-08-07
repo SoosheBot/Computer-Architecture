@@ -2,7 +2,6 @@
 
 import sys
 
-SP = 7
 class CPU:
     """Main CPU class."""
 
@@ -11,7 +10,8 @@ class CPU:
         self.ram = [0] * 256
         self.reg = [0] * 8
         self.pc = 0
-        self.halt = False
+        self.SP = 7
+        self.running = False
         self.equal = False
          
   
@@ -20,7 +20,6 @@ class CPU:
 
         address = 0
 
-        # Commented out the hardcoded program
         # For now, we've just hardcoded a program:
 
         program = [
@@ -164,10 +163,10 @@ class CPU:
             86: self.JNE,
             167: self.CMP,
            }
-        while not self.halt:
+        while not self.running:
             IR = self.ram_read(self.pc)
             operand_a = self.ram_read(self.pc + 1)
             operand_b = self.ram_read(self.pc + 2)
             run_inst[IR](operand_a, operand_b)
 
-        return self.halt
+        return self.running
