@@ -2,6 +2,7 @@
 
 import sys
 
+SP = 7
 class CPU:
     """Main CPU class."""
 
@@ -10,19 +11,10 @@ class CPU:
         self.ram = [0] * 256
         self.reg = [0] * 8
         self.pc = 0
-        self.sp = 7
         self.halt = False
         self.equal = False
          
-    # instructions suggested adding mar and mdr to CPU class for read and write
-    def ram_read(self, mar):
-        return self.ram[mar]
-
-    # see above
-    def ram_write(self, mar, mdr):
-        self.ram[mar] = mdr
-       
-
+  
     def load(self):
         """Load a program into memory."""
 
@@ -30,10 +22,10 @@ class CPU:
 
         with open(sys.argv[1]) as program:
             for instruction in program:
-                value = instruction.split("")[0].strip()
+                value = instruction.split("#")[0].strip()
                 if value == "":
                     continue
-                x = int(value, 2)
+                x = int(value, base=2)
                 self.ram[address] = x
                 address += 1
 
@@ -61,12 +53,12 @@ class CPU:
         if op == "ADD":
             self.reg[reg_a] += self.reg[reg_b]
         elif op == "MUL":
-            self.reg[reg_a] == self.reg[reg_b]
+            self.reg[reg_a] *= self.reg[reg_b]
         elif op == "CMP":
             if self.reg[reg_a] == self.reg[reg_b]:
-                return True
+                self.equal = True
             else:
-                return False
+                self.equal = False
         else:
             raise Exception("Unsupported ALU operation")
 
@@ -89,14 +81,24 @@ class CPU:
             print(" %02X" % self.reg[i], end='')
 
         print()
+    
+      # instructions suggested adding mar and MDR to CPU class for read and write
+    def ram_read(self, MAR):
+        return self.ram[MAR]
+
+    # see above
+    def ram_write(self, MAR, MDR):
+        self.ram[MAR] = MDR
+       
+
 
     def push_val(self, value):
-        self.reg[self.sp] -= 1
-        self.ram_write(value, self.reg[self.sp])
+        self.reg[SP] -= 1
+        self.ram_write(value, self.reg[SP])
     
     def pop_val(self):
-        value = self.ram_read(self.reg[self.sp])
-        self.reg[self.sp] += 1
+        value = self.ram_read(self.reg[SP])
+        self.reg[SP] += 1
         return value
 
     def LDI(self, operand_a, operand_b):
@@ -125,7 +127,7 @@ class CPU:
     
     
     def RET(self, operand_a, operand_b):
-        self.pc = self.pop_value()
+        self.pc = self.pop_val()
 
     def MUL(self, operand_a, operand_b):
         self.alu("MUL", operand_a, operand_b)
