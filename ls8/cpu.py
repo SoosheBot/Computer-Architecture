@@ -46,7 +46,11 @@ class CPU:
             self.reg[reg_a] += self.reg[reg_b]
         elif op == "MUL":
             self.reg[reg_a] *= self.reg[reg_b]
-
+        elif op == "CMP":
+            if self.reg[reg_a] == self.reg[reg_b]:
+                self.equal = True
+            else:
+                self.equal = False
         else:
             raise Exception("Unsupported ALU operation")
 
@@ -168,9 +172,14 @@ class CPU:
         else:
             self.pc += 2
 
-    # def CMP(self, operand_a, operand_b):
-    #     self.alu("CMP", operand_a, operand_b)
-    #     self.pc += 3
+    # Compare the values in two registers.
+    ## * If they are equal, set the Equal `E` flag to 1, otherwise set it to 0.
+    ## * If registerA is less than registerB, set the Less-than `L` flag to 1, otherwise set it to 0.
+    ## * If registerA is greater than registerB, set the Greater-than `G` flag to 1, otherwise set it to 0.
+
+    def CMP(self, operand_a, operand_b):
+        self.alu("CMP", operand_a, operand_b)
+        self.pc += 3
 
     # Reads the memory address that’s stored in register PC, and stores that result in IR, the Instruction Register
     def run(self):
@@ -184,11 +193,11 @@ class CPU:
             80: self.CALL,
             130: self.LDI,
             160: self.ADD,
-            # 162: self.MUL,
+            162: self.MUL,
             84: self.JMP,
             85: self.JEQ,
             86: self.JNE,
-            # 167: self.CMP,
+            167: self.CMP,
            }
         while not self.running:
             IR = self.ram_read(self.pc)
