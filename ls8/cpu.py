@@ -87,13 +87,16 @@ class CPU:
         self.MAR = address
         self.MDR = value
         self.ram[self.MAR] = self.MDR
-       
-    # defines a push value to set up the PUSH function
+
+
+    # defines a push value to set up the PUSH function -- helper function
     def push_val(self, value):
         self.reg[self.SP] -= 1
         self.ram_write(value, self.reg[self.SP])
     
-    # defines a pop value to set up the POP function
+
+
+    # defines a pop value to set up the POP function -- helper function
     def pop_val(self):
         value = self.ram_read(self.reg[self.SP])
         self.reg[self.SP] += 1
@@ -105,6 +108,7 @@ class CPU:
         self.pc += 3
 
 
+
     # Prints the numeric value stored in the given register.
     # Prints the decimal integer value that is stored in the given register to the console
     def PRN(self, operand_a, operand_b):
@@ -112,11 +116,14 @@ class CPU:
         self.pc += 2
     
 
+
     # Halts the CPU (and exits the emulator).
     def HLT(self, operand_a, operand_b):
         self.pc += 1
         sys.exit(0)
     
+
+
     # Pushes the value in the given register on the stack.
     # Decrements the `SP`. (in push_value)
     # Copies the value in the given register to the address pointed to by SP (also in pop_value).
@@ -143,20 +150,28 @@ class CPU:
     def RET(self, operand_a, operand_b):
         self.pc = self.pop_val()
 
+
+
     # Multiplies the values in two registers together and store the result in registerA. This is an alu instruction!
     def MUL(self, operand_a, operand_b):
         self.alu("MUL", operand_a, operand_b)
         self.pc +=3
+
+
 
     # Adds the value in two registers and stores the result in registerA.
     def ADD(self, operand_a, operand_b):
         self.alu("ADD", operand_a, operand_b)
         self.pc +=3
 
+
+
     # Jumps to the address stored in the given register.
     # Sets the `PC` to the address stored in the given register.
     def JMP(self, operand_a, operand_b):
         self.pc = self.reg[operand_a]
+
+
 
     # If `equal` flag is set (true), this jumps to the address stored in the given register.
     def JEQ(self, operand_a, operand_b):
@@ -165,6 +180,8 @@ class CPU:
         else:
             self.pc += 2
 
+
+
     # If `equal` flag is clear (false, 0), this jumps to the address stored in the given register
     def JNE(self, operand_a, operand_b):
         if self.equal == False:
@@ -172,14 +189,17 @@ class CPU:
         else:
             self.pc += 2
 
+
+
     # Compare the values in two registers.
     ## * If they are equal, set the Equal `E` flag to 1, otherwise set it to 0.
     ## * If registerA is less than registerB, set the Less-than `L` flag to 1, otherwise set it to 0.
     ## * If registerA is greater than registerB, set the Greater-than `G` flag to 1, otherwise set it to 0.
-
     def CMP(self, operand_a, operand_b):
         self.alu("CMP", operand_a, operand_b)
         self.pc += 3
+
+
 
     # Reads the memory address that’s stored in register PC, and stores that result in IR, the Instruction Register
     def run(self):
