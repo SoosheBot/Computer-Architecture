@@ -7,10 +7,12 @@ class CPU:
 
     def __init__(self):
         """Construct a new CPU."""
-        self.ram = [0] * 256
-        self.reg = [0] * 8
-        self.pc = 0
-        self.SP = 7
+        self.ram = [0] * 256 # the RAM
+        self.reg = [0] * 8 # registers
+        self.pc = 0 # counts the program
+        self.SP = 7 # points to the stack
+        self.MAR = None # memory address register
+        self.MDR = None # memory data register
         self.running = False
         self.equal = False
          
@@ -42,13 +44,6 @@ class CPU:
 
         if op == "ADD":
             self.reg[reg_a] += self.reg[reg_b]
-        elif op == "MUL":
-            self.reg[reg_a] *= self.reg[reg_b]
-        elif op == "CMP":
-            if self.reg[reg_a] == self.reg[reg_b]:
-                self.equal = True
-            else:
-                self.equal = False
         else:
             raise Exception("Unsupported ALU operation")
 
@@ -73,21 +68,25 @@ class CPU:
         print()
     
       # instructions suggested adding MAR and MDR to CPU class for ram_read and ram_write
-    def ram_read(self, MAR):
-        return self.ram[MAR]
+    def ram_read(self, address):
+        self.MAR = address
+        self.MDR = self.ram[self.MAR]
+        return self.MDR
 
     # see above
-    def ram_write(self, MAR, MDR):
-        self.ram[MAR] = MDR
+    def ram_write(self, address, value):
+        self.MAR = address
+        self.MDR = value
+        self.ram[self.MAR] = self.MDR
        
 
     def push_val(self, value):
-        self.reg[SP] -= 1
-        self.ram_write(value, self.reg[SP])
+        self.reg[self.SP] -= 1
+        self.ram_write(value, self.reg[self.SP])
     
     def pop_val(self):
-        value = self.ram_read(self.reg[SP])
-        self.reg[SP] += 1
+        value = self.ram_read(self.reg[self.SP])
+        self.reg[self.SP] += 1
         return value
 
     def LDI(self, operand_a, operand_b):
