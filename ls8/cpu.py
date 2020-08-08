@@ -13,8 +13,8 @@ class CPU:
         self.SP = 7 # points to the stack
         self.MAR = None # memory address register
         self.MDR = None # memory data register
-        self.running = False
-        self.equal = False
+        self.running = False # is the program running default False
+        self.equal = False #is it equal, default, false
          
   
     def load(self):
@@ -67,28 +67,32 @@ class CPU:
 
         print()
     
-      # instructions suggested adding MAR and MDR to CPU class for ram_read and ram_write
+    # instructions suggested adding MAR and MDR to CPU class for ram_read and ram_write
+    # reads the RAM -- helper function
     def ram_read(self, address):
         self.MAR = address
         self.MDR = self.ram[self.MAR]
         return self.MDR
 
     # see above
+    # writes to the RAM -- helpr function
     def ram_write(self, address, value):
         self.MAR = address
         self.MDR = value
         self.ram[self.MAR] = self.MDR
        
-
+    # defines a push value to set up the PUSH function
     def push_val(self, value):
         self.reg[self.SP] -= 1
         self.ram_write(value, self.reg[self.SP])
     
+    # defines a pop value to set up the PUSH function
     def pop_val(self):
         value = self.ram_read(self.reg[self.SP])
         self.reg[self.SP] += 1
         return value
 
+    # The byte value is a constant value in LDI
     def LDI(self, operand_a, operand_b):
         self.reg[operand_a] = operand_b
         self.pc += 3
@@ -125,7 +129,6 @@ class CPU:
         self.alu("ADD", operand_a, operand_b)
         self.pc +=3
 
-
     def JMP(self, operand_a, operand_b):
         self.pc = self.reg[operand_a]
 
@@ -145,6 +148,7 @@ class CPU:
         self.alu("CMP", operand_a, operand_b)
         self.pc += 3
 
+    # Reads the memory address that’s stored in register PC, and stores that result in IR, the Instruction Register
     def run(self):
         self.pc = 0
         run_inst = {
