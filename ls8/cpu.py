@@ -122,10 +122,7 @@ class CPU:
     # Reposition the register value to a location in the stack
     def PUSH(self, operand_a, operand_b):
         self.reg[self.SP] -= 1
-        stack_location = self.reg[self.SP]
-        register_number = self.ram_read(self.pc + 1)
-        value = self.reg[register_number]
-        self.ram_write(stack_location, value)
+        self.ram_write(self.reg[self.SP], self.reg[operand_a])
         self.pc += 2
         
       
@@ -134,7 +131,8 @@ class CPU:
     # Copies the value from the address pointed to by `SP` to the given register (pop_value)
     # Increments SP (pop_value)
     def POP(self, operand_a, operand_b):
-        self.reg[operand_a] = self.pop_val()
+        self.reg[operand_a] = self.ram_read(self.reg[self.SP])
+        self.reg[self.SP] += 1
         self.pc += 2
     
     # Calls a subroutine (function) at the address stored in the register. The address of the instruction directly after is pushed on to the stack so we can return to where we left off when the subroutine finishes.
