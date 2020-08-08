@@ -25,8 +25,9 @@ class CPU:
         # # You'll have to convert the binary strings to integer values to store in RAM. # # The built-in `int()` function can do that when you specify a number base as the second argument....
         # # x = int("1010101", 2)  # Converts binary string to integer!!!!
         address = 0
-        # ---- # error ---- #
-        with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/call.ls8") as program:
+        with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/interrupts.ls8") as program:
+        # ---- # working ---- #
+        # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/call.ls8") as program:
          # ----- # working ---- #
         # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/stack.ls8") as program:
         #----- # working ---- #
@@ -136,18 +137,25 @@ class CPU:
         self.reg[self.SP] += 1
         self.pc += 2
     
+    def push_val(self, value):
+        self.ram_write(value, self.reg[self.SP])	
+        self.reg[self.SP] -= 1
+
     # Calls a subroutine (function) at the address stored in the register. The address of the instruction directly after is pushed on to the stack so we can return to where we left off when the subroutine finishes.
     # The PC is set to the address stored in the given register. We jump to that location in RAM and execute the first instruction in the subroutine. The PC can move forward or backwards from its current location.
     def CALL(self, operand_a, operand_b):
-        self.reg[operand_b] = self.ram_read(self.reg[self.SP])
-        self.reg[self.SP] += 1
-    
+        self.reg[self.SP] -= 1
+        self.ram[self.reg[self.SP]]  = self.pc + 2
+        self.pc = self.reg[operand_a]
+        
+        
     
     # Returns from the subroutine.
     # Pops the value from the top of the stack and store it in the `PC`.
     def RET(self, operand_a, operand_b):
-        self.pc = self.pop_val()
-
+        self.pc = self.ram[self.reg[self.SP]]
+        self.reg[self.SP] += 1
+        
 
 
     # Multiplies the values in two registers together and store the result in registerA. This is an alu instruction!
