@@ -25,12 +25,18 @@ class CPU:
         # # You'll have to convert the binary strings to integer values to store in RAM. # # The built-in `int()` function can do that when you specify a number base as the second argument....
         # # x = int("1010101", 2)  # Converts binary string to integer!!!!
         address = 0
-        with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/stack.ls8") as program:
+        # error ----
+        # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/stack.ls8") as program:
+        # error ----
+        # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/call.ls8") as program:
+        # error ----
+        # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/interrupts.ls8") as program:
+        with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/mult.ls8") as program:
             for instructions in program:
-                value = instructions.split()[0].strip()
+                value = instructions.split("#")[0].strip()
                 if value == "":
-                    next
-                x = int(value, base=2)
+                    continue
+                x = int(value, 2)
                 self.ram[address] = x
                 address += 1
 
