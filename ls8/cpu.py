@@ -17,12 +17,24 @@ class CPU:
         self.equal = False # E flag, default, false
          
   
+    
     def load(self):
         """Load a program into memory."""
-
+        # In `load()`, you will now want to use those command line arguments to open a file, read in its contents line by line, and save appropriate data into RAM. 
+        # # As you process lines from the file, you should be on the lookout for blank lines(ignore them), and you should ignore everything after a `#`, since that's a comment.
+        # # You'll have to convert the binary strings to integer values to store in RAM. # # The built-in `int()` function can do that when you specify a number base as the second argument....
+        # # x = int("1010101", 2)  # Converts binary string to integer!!!!
         address = 0
+        # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/mult.ls8") as program:
+        with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/stack.ls8") as program:
+            for content in program:
+                value = content.split()[0].strip()
+                if value == "":
+                    next
+                x = int(value, base=2)
+                self.ram[address] = x
+                address += 1
 
-        
         # For now, we've just hardcoded a program:
         # program = [
         #     # From print8.ls8
