@@ -25,15 +25,16 @@ class CPU:
         # # You'll have to convert the binary strings to integer values to store in RAM. # # The built-in `int()` function can do that when you specify a number base as the second argument....
         # # x = int("1010101", 2)  # Converts binary string to integer!!!!
         address = 0
-        # error ----
-        # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/stack.ls8") as program:
-        # error ----
+        # ---- # error ---- #
         # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/call.ls8") as program:
-        # error ----
-        # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/interrupts.ls8") as program:
-        with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/mult.ls8") as program:
+         # ----- # error ---- #
+        with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/stack.ls8") as program:
+        #----- # working ---- #
+        # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/mult.ls8") as program:
+        #----- # working ---- #
+        # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/print8.ls8") as program:
             for instructions in program:
-                value = instructions.split("#")[0].strip()
+                value = instructions.split()[0].strip()
                 if value == "":
                     continue
                 x = int(value, 2)
@@ -43,7 +44,6 @@ class CPU:
 
     def alu(self, op, reg_a, reg_b):
         """ALU operations."""
-
         if op == "ADD":
             self.reg[reg_a] += self.reg[reg_b]
         elif op == "MUL":
@@ -93,8 +93,9 @@ class CPU:
 
     # defines a push value to set up the PUSH function -- helper function
     def push_val(self, value):
-        self.reg[self.SP] -= 1
         self.ram_write(value, self.reg[self.SP])
+        self.reg[self.SP] -= 1
+        
     
 
 
@@ -103,6 +104,8 @@ class CPU:
         value = self.ram_read(self.reg[self.SP])
         self.reg[self.SP] += 1
         return value
+
+
 
     # Sets the value of a register to an integer.
     def LDI(self, operand_a, operand_b):
