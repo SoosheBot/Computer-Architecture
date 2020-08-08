@@ -89,22 +89,7 @@ class CPU:
     def ram_write(self, address, value):
         self.MAR = address
         self.MDR = value
-        self.ram[self.MAR] = self.MDR
-
-
-    # defines a push value to set up the PUSH function -- helper function
-    def push_val(self, value):
-        self.ram_write(value, self.reg[self.SP])
-        self.reg[self.SP] -= 1
-        
-    
-
-
-    # defines a pop value to set up the POP function -- helper function
-    def pop_val(self):
-        value = self.ram_read(self.reg[self.SP])
-        self.reg[self.SP] += 1
-        return value
+        self.ram[self.MAR] = self.MDR        
 
 
 
@@ -131,11 +116,19 @@ class CPU:
 
 
     # Pushes the value in the given register on the stack.
-    # Decrements the `SP`. (in push_value)
-    # Copies the value in the given register to the address pointed to by SP (also in pop_value).
+    # Decrements the `SP`.
+    # Finds the current location of the stack
+    # Gets a register number from the instruction
+    # Reposition the register value to a location in the stack
     def PUSH(self, operand_a, operand_b):
-        self.push_val(self.reg[operand_a])
+        self.reg[self.SP] -= 1
+        stack_location = self.reg[self.SP]
+        register_number = self.ram_read(self.pc + 1)
+        value = self.reg[register_number]
+        self.ram_write(stack_location, value)
         self.pc += 2
+        
+      
     
     # Pops the value at the top of the stack into the given register
     # Copies the value from the address pointed to by `SP` to the given register (pop_value)
