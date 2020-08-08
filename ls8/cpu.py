@@ -44,6 +44,9 @@ class CPU:
 
         if op == "ADD":
             self.reg[reg_a] += self.reg[reg_b]
+        elif op == "MUL":
+            self.reg[reg_a] *= self.reg[reg_b]
+
         else:
             raise Exception("Unsupported ALU operation")
 
@@ -86,7 +89,7 @@ class CPU:
         self.reg[self.SP] -= 1
         self.ram_write(value, self.reg[self.SP])
     
-    # defines a pop value to set up the PUSH function
+    # defines a pop value to set up the POP function
     def pop_val(self):
         value = self.ram_read(self.reg[self.SP])
         self.reg[self.SP] += 1
@@ -136,9 +139,10 @@ class CPU:
     def RET(self, operand_a, operand_b):
         self.pc = self.pop_val()
 
-    # def MUL(self, operand_a, operand_b):
-    #     self.alu("MUL", operand_a, operand_b)
-    #     self.pc +=3
+    # Multiplies the values in two registers together and store the result in registerA. This is an alu instruction!
+    def MUL(self, operand_a, operand_b):
+        self.alu("MUL", operand_a, operand_b)
+        self.pc +=3
 
     # Adds the value in two registers and stores the result in registerA.
     def ADD(self, operand_a, operand_b):
