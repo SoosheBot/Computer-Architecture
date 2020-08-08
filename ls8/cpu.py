@@ -40,7 +40,8 @@ class CPU:
                 x = int(value, 2)
                 self.ram[address] = x
                 address += 1
-
+                
+                # possible try block here if we can't get the program to parse the "https://intellipaat.com/community/41648/how-to-fix-this-valueerror-invalid-literal-for-int-with-base-10-error-in-python"
 
     def alu(self, op, reg_a, reg_b):
         """ALU operations."""
