@@ -26,15 +26,15 @@ class CPU:
         # # x = int("1010101", 2)  # Converts binary string to integer!!!!
         address = 0
         # ---- # error ---- #
-        # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/call.ls8") as program:
-         # ----- # error ---- #
-        with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/stack.ls8") as program:
+        with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/call.ls8") as program:
+         # ----- # working ---- #
+        # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/stack.ls8") as program:
         #----- # working ---- #
         # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/mult.ls8") as program:
         #----- # working ---- #
         # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/print8.ls8") as program:
             for instructions in program:
-                value = instructions.split()[0].strip()
+                value = instructions.split("#")[0].strip()
                 if value == "":
                     continue
                 x = int(value, 2)
@@ -122,7 +122,7 @@ class CPU:
     # Increments the pc by 2
     def PUSH(self, operand_a, operand_b):
         self.reg[self.SP] -= 1
-        self.ram_write(self.reg[self.SP], self.reg[operand_a])
+        self.ram_write(self.reg[self.SP], self.reg[operand_b])
         self.pc += 2
         
       
@@ -139,8 +139,8 @@ class CPU:
     # Calls a subroutine (function) at the address stored in the register. The address of the instruction directly after is pushed on to the stack so we can return to where we left off when the subroutine finishes.
     # The PC is set to the address stored in the given register. We jump to that location in RAM and execute the first instruction in the subroutine. The PC can move forward or backwards from its current location.
     def CALL(self, operand_a, operand_b):
-        self.push_val(self.pc + 2)
-        self.pc = self.reg[operand_a]
+        self.reg[operand_b] = self.ram_read(self.reg[self.SP])
+        self.reg[self.SP] += 1
     
     
     # Returns from the subroutine.
