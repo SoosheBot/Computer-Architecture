@@ -97,6 +97,7 @@ class CPU:
         self.reg[operand_a] = operand_b
         self.pc += 3
 
+
     def PRN(self, operand_a, operand_b):
         print(self.reg[operand_a])
         self.pc += 2
@@ -121,9 +122,9 @@ class CPU:
     def RET(self, operand_a, operand_b):
         self.pc = self.pop_val()
 
-    def MUL(self, operand_a, operand_b):
-        self.alu("MUL", operand_a, operand_b)
-        self.pc +=3
+    # def MUL(self, operand_a, operand_b):
+    #     self.alu("MUL", operand_a, operand_b)
+    #     self.pc +=3
 
     def ADD(self, operand_a, operand_b):
         self.alu("ADD", operand_a, operand_b)
@@ -144,9 +145,9 @@ class CPU:
         else:
             self.pc += 2
 
-    def CMP(self, operand_a, operand_b):
-        self.alu("CMP", operand_a, operand_b)
-        self.pc += 3
+    # def CMP(self, operand_a, operand_b):
+    #     self.alu("CMP", operand_a, operand_b)
+    #     self.pc += 3
 
     # Reads the memory address that’s stored in register PC, and stores that result in IR, the Instruction Register
     def run(self):
@@ -160,11 +161,11 @@ class CPU:
             80: self.CALL,
             130: self.LDI,
             160: self.ADD,
-            162: self.MUL,
+            # 162: self.MUL,
             84: self.JMP,
             85: self.JEQ,
             86: self.JNE,
-            167: self.CMP,
+            # 167: self.CMP,
            }
         while not self.running:
             IR = self.ram_read(self.pc)
