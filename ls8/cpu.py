@@ -14,7 +14,7 @@ class CPU:
         self.MAR = None # memory address register
         self.MDR = None # memory data register
         self.running = False # is the program running default False
-        self.equal = False #is it equal, default, false
+        self.equal = False # E flag, default, false
          
   
     def load(self):
@@ -92,33 +92,47 @@ class CPU:
         self.reg[self.SP] += 1
         return value
 
-    # The byte value is a constant value in LDI
+    # Sets the value of a register to an integer.
     def LDI(self, operand_a, operand_b):
         self.reg[operand_a] = operand_b
         self.pc += 3
 
 
+    # Prints the numeric value stored in the given register.
+    # Prints the decimal integer value that is stored in the given register to the console
     def PRN(self, operand_a, operand_b):
         print(self.reg[operand_a])
         self.pc += 2
     
+
+    # Halts the CPU (and exits the emulator).
     def HLT(self, operand_a, operand_b):
         self.pc += 1
         sys.exit(0)
     
+    # Pushes the value in the given register on the stack.
+    # Decrements the `SP`. (in push_value)
+    # Copies the value in the given register to the address pointed to by SP (also in pop_value).
     def PUSH(self, operand_a, operand_b):
         self.push_val(self.reg[operand_a])
         self.pc += 2
     
+    # Pops the value at the top of the stack into the given register
+    # Copies the value from the address pointed to by `SP` to the given register (pop_value)
+    # Increments SP (pop_value)
     def POP(self, operand_a, operand_b):
         self.reg[operand_a] = self.pop_val()
         self.pc += 2
     
+    # Calls a subroutine (function) at the address stored in the register. The address of the instruction directly after is pushed on to the stack so we can return to where we left off when the subroutine finishes.
+    # The PC is set to the address stored in the given register. We jump to that location in RAM and execute the first instruction in the subroutine. The PC can move forward or backwards from its current location.
     def CALL(self, operand_a, operand_b):
         self.push_val(self.pc + 2)
         self.pc = self.reg[operand_a]
     
     
+    # Returns from the subroutine.
+    # Pops the value from the top of the stack and store it in the `PC`.
     def RET(self, operand_a, operand_b):
         self.pc = self.pop_val()
 
@@ -126,19 +140,24 @@ class CPU:
     #     self.alu("MUL", operand_a, operand_b)
     #     self.pc +=3
 
+    # Adds the value in two registers and stores the result in registerA.
     def ADD(self, operand_a, operand_b):
         self.alu("ADD", operand_a, operand_b)
         self.pc +=3
 
+    # Jumps to the address stored in the given register.
+    # Sets the `PC` to the address stored in the given register.
     def JMP(self, operand_a, operand_b):
         self.pc = self.reg[operand_a]
 
+    # If `equal` flag is set (true), this jumps to the address stored in the given register.
     def JEQ(self, operand_a, operand_b):
         if self.equal == True:
             self.pc = self.reg[operand_a]
         else:
             self.pc += 2
 
+    # If `equal` flag is clear (false, 0), this jumps to the address stored in the given register
     def JNE(self, operand_a, operand_b):
         if self.equal == False:
             self.pc = self.reg[operand_a]
