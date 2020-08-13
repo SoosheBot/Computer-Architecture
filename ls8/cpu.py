@@ -20,21 +20,18 @@ class CPU:
     
     def load(self):
         """Load a program into memory."""
-        # In `load()`, you will now want to use those command line arguments to open a file, read in its contents line by line, and save appropriate data into RAM. 
-        # # As you process lines from the file, you should be on the lookout for blank lines(ignore them), and you should ignore everything after a `#`, since that's a comment.
-        # # You'll have to convert the binary strings to integer values to store in RAM. # # The built-in `int()` function can do that when you specify a number base as the second argument....
-        # # x = int("1010101", 2)  # Converts binary string to integer!!!!
+            # In `load()`, you will now want to use those command line arguments to open a file, read in its contents line by line, and save appropriate data into RAM. 
+            # # As you process lines from the file, you should be on the lookout for blank lines(ignore them), and you should ignore everything after a `#`, since that's a comment.
+            # # You'll have to convert the binary strings to integer values to store in RAM. # # The built-in `int()` function can do that when you specify a number base as the second argument....
+            # # x = int("1010101", 2)  # Converts binary string to integer!!!!
         address = 0
-        with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/sctest.ls8") as program:
-        # ---- # error ---- #
-        # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/interrupts.ls8") as program:
-        # ---- # working ---- #
-        # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/call.ls8") as program:
-         # ----- # working ---- #
+        # ---- # working ---- prints 20,30, 36, 60 #
+        with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/call.ls8") as program:
+         # ----- # working ---- prints 2,4,1 #
         # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/stack.ls8") as program:
-        #----- # working ---- #
+        #----- # working ---- prints 72 #
         # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/mult.ls8") as program:
-        #----- # working ---- #
+        #----- # working ---- prints 8#
         # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/print8.ls8") as program:
             for instructions in program:
                 value = instructions.split("#")[0].strip()
@@ -125,9 +122,9 @@ class CPU:
     # Increments the pc by 2
     def PUSH(self, operand_a, operand_b):
         self.reg[self.SP] -= 1
-        self.ram_write(self.reg[self.SP], self.reg[operand_b])
+        self.ram_write(self.reg[self.SP], self.reg[operand_a])
         self.pc += 2
-        
+       
       
     
     # Pops the value at the top of the stack into the given register
