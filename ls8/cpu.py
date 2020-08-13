@@ -24,15 +24,25 @@ class CPU:
             # # As you process lines from the file, you should be on the lookout for blank lines(ignore them), and you should ignore everything after a `#`, since that's a comment.
             # # You'll have to convert the binary strings to integer values to store in RAM. # # The built-in `int()` function can do that when you specify a number base as the second argument....
             # # x = int("1010101", 2)  # Converts binary string to integer!!!!
+        
         address = 0
+        
         # ---- # working ---- prints 20,30, 36, 60 #
         with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/call.ls8") as program:
+
          # ----- # working ---- prints 2,4,1 #
         # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/stack.ls8") as program:
+
         #----- # working ---- prints 72 #
         # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/mult.ls8") as program:
-        #----- # working ---- prints 8#
+
+        #----- # working ---- prints 8 #
         # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/print8.ls8") as program:
+
+        #---- # working ----- prints 1,4,5 # 
+        # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/sctest.ls8") as program:
+
+        
             for instructions in program:
                 value = instructions.split("#")[0].strip()
                 if value == "":
@@ -77,15 +87,15 @@ class CPU:
 
         print()
     
-    # instructions suggested adding MAR and MDR to CPU class for ram_read and ram_write
-    # reads the RAM -- helper function
+    # accepts addres to read
+    # returns value stored there
     def ram_read(self, address):
         self.MAR = address
         self.MDR = self.ram[self.MAR]
         return self.MDR
 
-    # see above
-    # writes to the RAM -- helpr function
+    # accepts address to read
+    # writes to the RAM 
     def ram_write(self, address, value):
         self.MAR = address
         self.MDR = value
@@ -210,24 +220,24 @@ class CPU:
     def run(self):
         self.pc = 0
         run_inst = {
-            1: self.HLT,
-            17: self.RET,
-            71: self.PRN,
-            69: self.PUSH,
-            70: self.POP,
-            80: self.CALL,
-            130: self.LDI,
-            160: self.ADD,
-            162: self.MUL,
-            84: self.JMP,
-            85: self.JEQ,
-            86: self.JNE,
-            167: self.CMP,
+            1: self.HLT, # binary -- 00000001
+            17: self.RET, # binary -- 00010001
+            71: self.PRN, # 01000111
+            69: self.PUSH, # 01000101
+            70: self.POP, # 01000110
+            80: self.CALL, # 01010000
+            130: self.LDI, # 10000010
+            160: self.ADD, # 10100000
+            162: self.MUL, # 10100010
+            84: self.JMP, # 01010100
+            85: self.JEQ, # 01010101
+            86: self.JNE, # 01010110
+            167: self.CMP, # 10100111
            }
         while not self.running:
             IR = self.ram_read(self.pc)
             operand_a = self.ram_read(self.pc + 1)
             operand_b = self.ram_read(self.pc + 2)
-            run_inst[IR](operand_a, operand_b)
+            run_inst[IR](operand_a, operand_b)            
 
         return self.running
