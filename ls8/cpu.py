@@ -28,7 +28,7 @@ class CPU:
         address = 0
         
         # ---- # working ---- prints 20,30, 36, 60 #
-        with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/call.ls8") as program:
+        # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/call.ls8") as program:
 
          # ----- # working ---- prints 2,4,1 #
         # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/stack.ls8") as program:
@@ -40,7 +40,7 @@ class CPU:
         # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/print8.ls8") as program:
 
         #---- # working ----- prints 1,4,5 # 
-        # with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/sctest.ls8") as program:
+        with open("/Users/Mahadevi/Documents/CS7/architecture/Computer-Architecture/ls8/examples/sctest.ls8") as program:
 
         
             for instructions in program:
@@ -146,9 +146,9 @@ class CPU:
         self.reg[self.SP] += 1
         self.pc += 2
     
-    def push_val(self, value):
-        self.ram_write(value, self.reg[self.SP])	
-        self.reg[self.SP] -= 1
+    # def push_val(self, value):
+    #     self.ram_write(value, self.reg[self.SP])	
+    #     self.reg[self.SP] -= 1
 
     # Calls a subroutine (function) at the address stored in the register. The address of the instruction directly after is pushed on to the stack so we can return to where we left off when the subroutine finishes.
     # The PC is set to the address stored in the given register. We jump to that location in RAM and execute the first instruction in the subroutine. The PC can move forward or backwards from its current location.
